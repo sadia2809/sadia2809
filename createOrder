@@ -1,0 +1,28 @@
+class Order < ApplicationRecord
+  belongs_to :store
+  belongs_to :product
+
+  has_many :order_options, dependent: :destroy
+  has_many :options, through: :order_options
+  accepts_nested_attributes_for :order_options
+end
+
+class OrderOption < ApplicationRecord
+  belongs_to :option
+  belongs_to :order
+  accepts_nested_attributes_for :option
+end
+
+class Option < ApplicationRecord
+  belongs_to :product_category
+  has_many :order_options, dependent: :destroy
+  has_many :orders, through: :order_options
+end
+
+class ProductCategory < ApplicationRecord
+  belongs_to :store
+  has_many :products, dependent: :destroy
+  accepts_nested_attributes_for :products, allow_destroy: true
+  has_many :options, dependent: :destroy
+  accepts_nested_attributes_for :options, allow_destroy: true
+end
